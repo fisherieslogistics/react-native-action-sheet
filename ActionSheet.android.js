@@ -64,6 +64,11 @@ class ActionGroup extends React.Component {
     length: PropTypes.number.isRequired,
     textStyle: Text.propTypes.style,
   };
+  
+  constructor(props){
+    super(props);
+    this._onSelect = this.onSelect.bind(this);
+  }
 
   render() {
     let {
