@@ -67,6 +67,9 @@ class ActionGroup extends React.Component {
   
   constructor(props){
     super(props);
+    this.state = {
+      
+    }
   }
 
   render() {
@@ -139,6 +142,9 @@ export default class ActionSheet extends React.Component {
   constructor(props){
     super(props);
     this._onSelect = this.onSelect.bind(this);
+    this.state = {
+      
+    }
   }
   
   props: ActionSheetProps;
