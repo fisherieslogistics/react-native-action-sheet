@@ -142,8 +142,14 @@ export default class ActionSheet extends React.Component {
   constructor(props){
     super(props);
     this._onSelect = this._onSelect.bind(this);
+    this.showActionSheetWithOptions = this.showActionSheetWithOptions.bind(this);
     this.state = {
-
+      isVisible: false,
+      isAnimating: false,
+      options: null,
+      onSelect: null,
+      overlayOpacity: new Animated.Value(0),
+      sheetOpacity: new Animated.Value(0),
     }
   }
 
