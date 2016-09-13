@@ -67,7 +67,6 @@ class ActionGroup extends React.Component {
   
   constructor(props){
     super(props);
-    this._onSelect = this.onSelect.bind(this);
   }
 
   render() {
@@ -136,6 +135,12 @@ class ActionGroup extends React.Component {
 
 // Has same API as https://facebook.github.io/react-native/docs/actionsheetios.html
 export default class ActionSheet extends React.Component {
+  
+  constructor(props){
+    super(props);
+    this._onSelect = this.onSelect.bind(this);
+  }
+  
   props: ActionSheetProps;
   _animateOutCallback: ?() => void = null;
 
