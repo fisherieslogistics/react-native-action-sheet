@@ -156,15 +156,6 @@ export default class ActionSheet extends React.Component {
   props: ActionSheetProps;
   _animateOutCallback: ?() => void = null;
 
-  state: ActionSheetState = {
-    isVisible: false,
-    isAnimating: false,
-    options: null,
-    onSelect: null,
-    overlayOpacity: new Animated.Value(0),
-    sheetOpacity: new Animated.Value(0),
-  };
-
   render() {
     let { isVisible } = this.state;
     let overlay = isVisible ? (
@@ -273,6 +264,7 @@ export default class ActionSheet extends React.Component {
   }
 
   _onSelect = (index: number): boolean => {
+    console.log("RELF")
     if (this.state.isAnimating) {
       return false;
     }
