@@ -64,11 +64,11 @@ class ActionGroup extends React.Component {
     length: PropTypes.number.isRequired,
     textStyle: Text.propTypes.style,
   };
-  
+
   constructor(props){
     super(props);
     this.state = {
-      
+
     }
   }
 
@@ -138,15 +138,15 @@ class ActionGroup extends React.Component {
 
 // Has same API as https://facebook.github.io/react-native/docs/actionsheetios.html
 export default class ActionSheet extends React.Component {
-  
+
   constructor(props){
     super(props);
-    this._onSelect = this.onSelect.bind(this);
+    this._onSelect = this._onSelect.bind(this);
     this.state = {
-      
+
     }
   }
-  
+
   props: ActionSheetProps;
   _animateOutCallback: ?() => void = null;
 
