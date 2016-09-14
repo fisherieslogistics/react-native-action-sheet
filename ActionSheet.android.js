@@ -53,23 +53,10 @@ const OPACITY_ANIMATION_TIME = 150;
 const PIXEL = 1 / PixelRatio.get();
 
 class ActionGroup extends React.Component {
-  props: ActionGroupProps;
-
-  static propTypes = {
-    options: PropTypes.array.isRequired,
-    icons: PropTypes.array,
-    destructiveButtonIndex: PropTypes.number,
-    onSelect: PropTypes.func.isRequired,
-    startIndex: PropTypes.number.isRequired,
-    length: PropTypes.number.isRequired,
-    textStyle: Text.propTypes.style,
-  };
 
   constructor(props){
     super(props);
-    this.state = {
-
-    }
+    this.state = {}
   }
 
   render() {
@@ -77,12 +64,10 @@ class ActionGroup extends React.Component {
       options,
       icons,
       destructiveButtonIndex,
-      onSelect,
       startIndex,
       length,
       textStyle,
     } = this.props;
-
     let optionViews = [];
 
     let nativeFeedbackBackground = TouchableNativeFeedbackSafe.Ripple(
@@ -106,13 +91,14 @@ class ActionGroup extends React.Component {
           />
           )
       }
-
+      console.log("pushing option views");
       optionViews.push(
         <TouchableNativeFeedbackSafe
           key={i}
           pressInDelay={0}
+          index={i}
           background={nativeFeedbackBackground}
-          onPress={() => onSelect(i)}
+          onPress={ () => this.props.onSelect(i) }
           style={styles.button}>
           {iconElement}
           <Text style={[styles.text, {color}, textStyle]}>
@@ -141,8 +127,7 @@ export default class ActionSheet extends React.Component {
 
   constructor(props){
     super(props);
-    this._onSelect = this._onSelect.bind(this);
-    this.showActionSheetWithOptions = this.showActionSheetWithOptions.bind(this);
+    console.log("construction");
     this.state = {
       isVisible: false,
       isAnimating: false,
@@ -151,6 +136,11 @@ export default class ActionSheet extends React.Component {
       overlayOpacity: new Animated.Value(0),
       sheetOpacity: new Animated.Value(0),
     }
+    this.showActionSheetWithOptions = this.showActionSheetWithOptions.bind(this);
+    this._selectCancelButton = this._selectCancelButton.bind(this);
+    this._renderSheet = this._renderSheet.bind(this);
+    this._onSelect = this._onSelect.bind(this);
+    this._animateOut = this._animateOut.bind(this);
   }
 
   props: ActionSheetProps;
@@ -175,12 +165,23 @@ export default class ActionSheet extends React.Component {
     );
   }
 
+  _onSelect(index) {
+    if (this.state.isAnimating) {
+      return false;
+    }
+    console.log("cunt", this.state.onSelect, Object.keys(this.state));
+    this.state.onSelect(index);
+    return this._animateOut();
+  }
+
   _renderSheet() {
     if (!this.state.options) {
       return;
     }
 
     let numOptions = this.state.options.options.length;
+
+    const self = this;
 
     return (
       <TouchableWithoutFeedback onPress={this._selectCancelButton}>
@@ -195,7 +196,7 @@ export default class ActionSheet extends React.Component {
               options={this.state.options.options}
               icons={this.state.options.icons}
               destructiveButtonIndex={this.state.options.destructiveButtonIndex}
-              onSelect={this._onSelect}
+              onSelect={ this._onSelect }
               startIndex={0}
               length={numOptions}
               textStyle={this.state.options.textStyle}
@@ -206,14 +207,13 @@ export default class ActionSheet extends React.Component {
     );
   }
 
-  showActionSheetWithOptions(
-    options: ActionSheetOptions,
-    onSelect: (i: number) => void,
-    onAnimateOut: () => void
-  ) {
+  showActionSheetWithOptions(options, onSelect = (b) => { console.log("b", b) }, onAnimateOut) {
+    console.log(options, onSelect, onAnimateOut);
     if (this.state.isVisible) {
       return;
     }
+
+    console.log("was not visible :)");
 
     this.setState({
       options,
@@ -251,7 +251,7 @@ export default class ActionSheet extends React.Component {
     BackAndroid.addEventListener('actionSheetHardwareBackPress', this._selectCancelButton);
   }
 
-  _selectCancelButton = () => {
+  _selectCancelButton() {
     if (!this.state.options) {
       return false;
     }
@@ -263,17 +263,7 @@ export default class ActionSheet extends React.Component {
     }
   }
 
-  _onSelect = (index: number): boolean => {
-    console.log("RELF")
-    if (this.state.isAnimating) {
-      return false;
-    }
-
-    this.state.onSelect && this.state.onSelect(index);
-    return this._animateOut();
-  }
-
-  _animateOut = (): boolean => {
+  _animateOut() {
     if (this.state.isAnimating) {
       return false;
     }
